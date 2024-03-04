@@ -5,7 +5,7 @@ const cors = require('cors');
 const signupRoutes = require('./Routes/signupRoutes');
 const signinRoutes = require('./Routes/signinRoutes');
 const userRoute = require('./Routes/userRoute');
-const profilepicRoute= require('./Routes/profilepicRoute');
+const profilepicRoute = require('./Routes/profilepicRoute');
 const crypto = require('crypto');
 
 const generateRandomString = () => {
@@ -18,15 +18,17 @@ console.log(secretKey);
 const app = express();
 const port = process.env.PORT || 8000;
 
-// Use the cors middleware with specific options
-const corsOptions = {
-    origin: 'http://localhost:3000', // Replace with your frontend domain
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Enable cookies and credentials for cross-origin requests
-    optionsSuccessStatus: 204, // No Content for preflight requests
+// Define CORS options
+/**const corsOptions = {
+    origin: 'https://frontend-ss.netlify.app',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+    optionsSuccessStatus: 204, // to handle preflight requests
 };
+**/
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 app.use(express.json());
 app.use(
@@ -42,29 +44,15 @@ app.use(
     })
 );
 
-// Handle CORS preflight requests
-app.options('*', cors(corsOptions));
 
 app.use('/api/user', signupRoutes);
 app.use('/api/user', signinRoutes);
 app.use('/api/user', userRoute);
-app.use('/api/user', profilepicRoute)
+app.use('/api/user', profilepicRoute);
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-app.get('/', (req, res) => {
-    res.send(`
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Hello Page</title>
-      </head>
-      <body>
-        <h1>Hello</h1>
-      </body>
-      </html>
-    `);
-  });
+
+app.use('/.netlify/functions/api', router);
+module.exports.handlers = serverless(app);

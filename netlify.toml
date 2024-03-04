@@ -1,0 +1,14 @@
+[build]
+functions="functions"
+
+ [[redirects]]
+from = "/*"
+to = "/index.html"
+status = 200 
+
+[[redirects]]
+  from = "/search"
+  to = "https://frontend-ss.netlify.app"
+  status = 200
+  force = true
+  headers = {X-From = "Netlify"}
