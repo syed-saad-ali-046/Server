@@ -19,16 +19,16 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 // Define CORS options
-/**const corsOptions = {
+const corsOptions = {
     origin: 'https://frontend-ss.netlify.app',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
     optionsSuccessStatus: 204, // to handle preflight requests
 };
-**/
 
-app.use(cors());
+// Enable CORS
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(
@@ -44,6 +44,8 @@ app.use(
     })
 );
 
+// Handle CORS preflight requests
+app.options('*', cors());
 
 app.use('/api/user', signupRoutes);
 app.use('/api/user', signinRoutes);
